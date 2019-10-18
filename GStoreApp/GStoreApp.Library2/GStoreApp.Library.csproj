@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>GStoreApp.Library</AssemblyName>
+    <RootNamespace>GStoreApp.Library</RootNamespace>
+  </PropertyGroup>
+
+</Project>
