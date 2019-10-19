@@ -10,15 +10,15 @@ namespace GStore.WebUI.Models
     public class CustomerViewModel
     {
         [DisplayName("Customer ID")]
-        public int customerId { get; set; }
+        public int CustomerId { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$"), Required, StringLength(15)]
+        [RegularExpression(@"^[a-zA-Z""'\s-]*$"), Required, StringLength(15)]
         public string FirstName { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z""'\s-]*$"), Required, StringLength(14)]
+        [RegularExpression(@"^[a-zA-Z""'\s-]*$"), Required, StringLength(14)]
         public string LastName { get; set; }
 
-        [RegularExpression(@"[^0-9""'\s-]*$"), Required, StringLength(10)]
+        [RegularExpression(@"[0-9""'\s-]*$"), Required, StringLength(10, MinimumLength = 10)]
         public string Phone { get; set; }
 
         [Required]

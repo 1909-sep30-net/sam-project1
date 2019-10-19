@@ -1,0 +1,63 @@
+﻿@model GStore.WebUI.Models.OrderViewModel
+@using GStore.WebUI.Models;
+
+
+@{
+    ViewData["Title"] = "PlaceOrder";
+    CustomerViewModel customer = (CustomerViewModel)ViewData["Customer"];
+
+}
+
+<h1>PlaceOrder</h1>
+
+
+<h4>Current Customer First Name: @customer.FirstName</h4>
+<h4>Current Customer Last Name: @customer.LastName</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="PlaceOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NSAmount" class="control-label"></label>
+                <input asp-for="NSAmount" class="form-control" />
+                <span asp-validation-for="NSAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="XBOAmount" class="control-label"></label>
+                <input asp-for="XBOAmount" class="form-control" />
+                <span asp-validation-for="XBOAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PS4PAmount" class="control-label"></label>
+                <input asp-for="PS4PAmount" class="form-control" />
+                <span asp-validation-for="PS4PAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PS4Amount" class="control-label"></label>
+                <input asp-for="PS4Amount" class="form-control" />
+                <span asp-validation-for="PS4Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="XB360Amount" class="control-label"></label>
+                <input asp-for="XB360Amount" class="form-control" />
+                <span asp-validation-for="XB360Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PS3Amount" class="control-label"></label>
+                <input asp-for="PS3Amount" class="form-control" />
+                <span asp-validation-for="PS3Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary"
+                       asp-controller="Home" asp-action="Index" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

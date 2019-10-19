@@ -51,7 +51,8 @@ namespace DB.Repo
             //Search Customer from database
             IQueryable<d.Customer> cusotmerFound
                 = dbcontext.Customer.Where(c => c.LastName == customer.LastName
-                                           && c.FirstName == customer.FirstName);
+                                           && c.FirstName == customer.FirstName
+                                           && c.PhoneNumber == customer.PhoneNumber);
 
             // IEnumerable<l.Customer> customerFound = Mapper.MapCustomer(entity);
             
