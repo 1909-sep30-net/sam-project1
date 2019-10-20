@@ -42,7 +42,6 @@ namespace GStore.WebUI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    int test = 0;
                     return View(cvModel);
                 }
 
@@ -57,18 +56,30 @@ namespace GStore.WebUI.Controllers
                     FavoriteStore = cvModel.FavoriteStore
                 };
 
-                if ( iRepo.SearchCustomer(customer).Count() > 0 )
+                if (iRepo.SearchCustomer(customer).Count() > 0)
                 {
                     logger.Info("CustomerController: Existed Customer Find");
-                    logger.Info(iRepo.SearchCustomer(customer).ToString());
+                    customer.CustomerId = iRepo.SearchCustomer(customer).ToList()[0].CustomerId;
                     ViewData["Customer"] = cvModel;
+                    TempData["Customer"] = customer.CustomerId;
+                    ViewData["Store"] = (int)customer.FavoriteStore;
+                    TempData["Store"] = (int)customer.FavoriteStore;
+
                     return View("PlaceOrder");
                 }
+                else
+                {
+                    iRepo.AddCustomer(customer);
 
-                iRepo.AddCustomer(customer);
-                logger.Info("CustomerController: New Customer is Added");
-                ViewData["Customer"] = cvModel;
-                return View("PlaceOrder");
+                    logger.Info("CustomerController: New Customer is Added");
+
+                    ViewData["Customer"] = cvModel;
+                    TempData["Customer"] = customer.CustomerId;
+                    ViewData["Store"] = (int)customer.FavoriteStore;
+                    TempData["Store"] = (int)customer.FavoriteStore;
+
+                    return View("PlaceOrder");
+                }
             }
             catch ( InvalidOperationException ex )
             {
@@ -76,10 +87,10 @@ namespace GStore.WebUI.Controllers
 
             }
         }
-
+        //GET
         public ActionResult PlaceOrder()
         {
-
+            var ovm = new OrderViewModel();
 
             return View();
         }
@@ -89,9 +100,71 @@ namespace GStore.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PlaceOrder( OrderViewModel ovm )
         {
-            
 
-            return View();
+            int customerId = (int)TempData["Customer"];
+            int storeId = (int)TempData["Store"];
+            List<Product> products = iRepo.SearchProduct().ToList();
+            List<decimal> unitPrice = new List<decimal>();
+            PriceViewModel price = new PriceViewModel
+            {
+                Price = unitPrice
+            };
+
+            for (int i = 0; i < products.Count; i++)
+            {
+                price.Price.Add(products[i].UnitPrice);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(ovm);
+            }
+
+            List<int> amount = new List<int>();
+            decimal totalPrice = 0;
+            for (int i = 0; i < 6; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        amount.Add(ovm.NSAmount);
+                        totalPrice += products[i].UnitPrice * ovm.NSAmount;
+                        break;
+                    case 1:
+                        amount.Add(ovm.PS4PAmount);
+                        totalPrice += products[i].UnitPrice * ovm.PS4PAmount;
+                        break;
+                    case 2:
+                        amount.Add(ovm.XBOAmount);
+                        totalPrice += products[i].UnitPrice * ovm.XBOAmount;
+                        break;
+                    case 3:
+                        amount.Add(ovm.PS4Amount);
+                        totalPrice += products[i].UnitPrice * ovm.PS4Amount;
+                        break;
+                    case 4:
+                        amount.Add(ovm.PS3Amount);
+                        totalPrice += products[i].UnitPrice * ovm.PS3Amount;
+                        break;
+                    default:
+                        amount.Add(ovm.XB360Amount);
+                        totalPrice += products[i].UnitPrice * ovm.XB360Amount;
+                        break;
+                }
+            }
+
+            Order order = new Order
+            {
+                CustomerId = customerId,
+                Amount = amount,
+                OrderDate = DateTime.Now,
+                TotalPrice = totalPrice,
+                StoreId = storeId
+            };
+
+            string orderPlaced = iRepo.OrderPlaced(order);
+
+            return View("Index");
         }
     }
 }

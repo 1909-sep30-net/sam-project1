@@ -74,48 +74,19 @@ namespace DB.Repo
             List < l.Inventory > invent = CurrentInventoryE.ToList();
             for ( int j = 0; j < CurrentInventoryE.Count(); j++)
             {
-                if ( j == 0 )
+                if ( invent[j].Amount - order.Amount[j] < 0 )
                 {
-                    if ( invent[j].Amount - order.NSAmount < 0 )
-                    {
-                        return "Order Failed, not enough Inventory";
-                        logger.Warn($"Stoed ID: {order.StoreId} Doesn't have enough NSwitch in stock.");
-                    }
-                    else
-                    {
-                        var nsN = dbcontext.Inventory.Where(i => i.ProductId == j + 1)
-                                                     .First();
-                        nsN.Amount = invent[j].Amount - order.NSAmount;
-                    }
-                } 
-                else if ( j == 1 )
-                {
-                    if (invent[j].Amount - order.XBAmount < 0)
-                    {
-                        return "Order Failed, not enough Inventory";
-                        logger.Warn($"Stoed ID: {order.StoreId} Doesn't have enough NSwitch in stock.");
-                    }
-                    else
-                    {
-                        var xbN = dbcontext.Inventory.Where(i => i.ProductId == j + 1)
-                                                     .First();
-                        xbN.Amount = invent[j].Amount - order.XBAmount;
-                    }
+                    return "Sorry! We don't have enough items in our storage.";
                 }
                 else
                 {
-                    if (invent[j].Amount - order.PSAmount < 0)
+                    var inventory = dbcontext.Inventory.Where(i => i.ProductId == j + 1)
+                             .First();
+                    inventory.Amount = invent[j].Amount - order.Amount[j];
+                    if ( j == CurrentInventoryE.Count() - 1)
                     {
-                        return "Order Failed, not enough Inventory";
-                        logger.Warn($"Stoed ID: {order.StoreId} Doesn't have enough NSwitch in stock.");
-                    }
-                    else
-                    {
-                        var psN = dbcontext.Inventory.Where(i => i.ProductId == j + 1)
-                                                     .First();
-                        psN.Amount = invent[j].Amount - order.PSAmount;
                         dbcontext.SaveChanges();
-                        logger.Info("Inventory updated");
+                        logger.Info("Inventory Updated!");
                     }
                 }
             }
@@ -127,29 +98,20 @@ namespace DB.Repo
 
             int orderId = orderOverView.OrderId;
 
-            if (order.NSAmount != 0)
+            string productName;
+            int orderAmount;
+            IQueryable < d.Product > products = dbcontext.Product;
+            List<l.Product> libraryProducts = products.Select(Mapper.MapProduct).ToList();
+            for( int i = 0; i < 6; i++)
             {
-                int amount1 = order.NSAmount;
-                string name1 = "NSwitch";
-                d.OrderItem itemN = Mapper.MapOrderItem(amount1, orderId, name1);
-                dbcontext.Add(itemN);
-                logger.Info($"Order detail for {orderId} and {name1} is added to database");
-            }
-            if (order.XBAmount != 0)
-            {
-                int amount2 = order.XBAmount;
-                string name2 = "Xbox One";
-                d.OrderItem itemX = Mapper.MapOrderItem(amount2, orderId, name2);
-                dbcontext.Add(itemX);
-                logger.Info($"Order detail for {orderId} and {name2} is added to database");
-            }
-            if (order.PSAmount != 0)
-            {
-                int amount3 = order.PSAmount;
-                string name3 = "Playstation 4 Pro";
-                d.OrderItem itemP = Mapper.MapOrderItem(amount3, orderId, name3);
-                dbcontext.Add(itemP);
-                logger.Info($"Order detail for {orderId} and {name3} is added to database");
+                if ( order.Amount[i] != 0)
+                {
+                    orderAmount = order.Amount[i];
+                    productName = libraryProducts[i].ProductName;
+                    d.OrderItem item
+                        = Mapper.MapOrderItem(orderAmount, orderId, productName);
+                    dbcontext.Add(item);
+                }
             }
 
             dbcontext.SaveChanges();
@@ -244,17 +206,16 @@ namespace DB.Repo
         /// </summary>
         /// <param name="productId"></param>
         /// <returns></returns>
-        public l.Product SearchProduct( int productId )
+        public IEnumerable<l.Product> SearchProduct()
         {
-             d.Product product = dbcontext.Product.Find(productId);
+             IQueryable<d.Product> product = dbcontext.Product;
              if (product == null)
              {
                  return null;
              }
              else
              {
-                 l.Product storeFind = Mapper.MapProduct(product);
-                 return storeFind;
+                 return product.Select(Mapper.MapProduct);
              }
         }
     }

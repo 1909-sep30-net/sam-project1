@@ -99,9 +99,9 @@ namespace DB.Repo
             return new Entities.OrderOverView
             {
                 OrderId = 0,
-                StoreId = (int)(o.Customer.FavoriteStore),
+                StoreId = o.StoreId,
                 OrderDate = o.OrderDate,
-                CustomerId = o.Customer.CustomerId,
+                CustomerId = o.CustomerId,
                 TotalPrice = o.TotalPrice
             };
         }
