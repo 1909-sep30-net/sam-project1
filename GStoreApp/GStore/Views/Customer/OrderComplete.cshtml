@@ -1,0 +1,90 @@
+﻿@model GStore.WebUI.Models.Receipt
+
+@{
+    ViewData["Title"] = "OrderComplete";
+}
+
+<h2>Congratulations! Your Order is Complete</h2>
+<h2>Below is your Order receipt</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.orderId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.orderId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.CustomerId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.CustomerId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.StoreId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.StoreId)
+        </dd>
+        @for (int amount = 0; amount < 6; amount++)
+        {
+            if (Model.Order.Amount[amount] != 0)
+            {
+                switch (amount)
+                {
+                    case (0):
+
+                        <dt class="col-sm-2">
+                            Nintendo Switch
+                        </dt>
+                        break;
+                    case (1):
+                        <dt class="col-sm-2">
+                            Playstation 4 Pro
+                        </dt>
+                        break;
+                    case (2):
+                        <dt class="col-sm-2">
+                            Xbox One
+                        </dt>
+                        break;
+                    case (3):
+                        <dt class="col-sm-2">
+                            Playstation 4
+                        </dt>
+                        break;
+                    case (4):
+                        <dt class="col-sm-2">
+                            Playstation 3
+                        </dt>
+                        break;
+                    default:
+                        <dt class="col-sm-2">
+                            Xbox 360
+                        </dt>
+                        break;
+                }
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Order.Amount[amount])
+                </dd>
+            }
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.OrderDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.OrderDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.TotalPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.TotalPrice)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller = "Home" asp-action="Index">Back to Home page</a>
+</div>

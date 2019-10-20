@@ -65,7 +65,7 @@ namespace DB.Repo
         /// </summary>
         /// <param name="order"></param>
         /// <returns>order success or fail message</returns>
-        public string OrderPlaced( l.Order order )
+        public int OrderPlaced( l.Order order )
         {
             IQueryable<d.Inventory> CurrentInventoryQ
                 = dbcontext.Inventory.Where(i => i.StoreId == order.StoreId)
@@ -76,7 +76,8 @@ namespace DB.Repo
             {
                 if ( invent[j].Amount - order.Amount[j] < 0 )
                 {
-                    return "Sorry! We don't have enough items in our storage.";
+                    logger.Info($"Inventory for {invent[j].InventoryId} is not enough");
+                    return -1;
                 }
                 else
                 {
@@ -115,7 +116,7 @@ namespace DB.Repo
             }
 
             dbcontext.SaveChanges();
-            return $"Order Success!! Your order Id is: {orderId}.";
+            return orderId;
 
         }
 

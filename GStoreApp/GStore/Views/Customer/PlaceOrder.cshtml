@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "PlaceOrder";
-    CustomerViewModel customer = (CustomerViewModel)ViewData["Customer"];
+    int customerId = (int)ViewData["Customer"];
     int storeId = (int)ViewData["Store"];
 
 }
@@ -12,8 +12,8 @@
 <h1>PlaceOrder</h1>
 
 
-<h4>Current Customer First Name: @customer.FirstName</h4>
-<h4>Current Customer Last Name: @customer.LastName</h4>
+<h4>Current Customer ID: @customerId</h4>
+
 <h4>Current Store ID: @storeId</h4>
 
 <hr />
@@ -22,33 +22,105 @@
         <form asp-action="PlaceOrder">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NSAmount" class="control-label"></label>
-                <input asp-for="NSAmount" class="form-control" />
+                <label asp-for="NSAmount" class="control-label"></label>    $300.00
+                <select asp-for="NSAmount" class="selectpicker">
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                </select>
                 <span asp-validation-for="NSAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="XBOAmount" class="control-label"></label>
-                <input asp-for="XBOAmount" class="form-control" />
+                <select asp-for="XBOAmount" class="selectpicker">
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                </select>
                 <span asp-validation-for="XBOAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PS4PAmount" class="control-label"></label>
-                <input asp-for="PS4PAmount" class="form-control" />
+                <label asp-for="PS4PAmount" class="control-label"></label>    $299.99
+                <select asp-for="PS4PAmount" class="selectpicker">
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                </select>
                 <span asp-validation-for="PS4PAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PS4Amount" class="control-label"></label>
-                <input asp-for="PS4Amount" class="form-control" />
+                <label asp-for="PS4Amount" class="control-label"></label>    $250
+                <select asp-for="PS4Amount" class="selectpicker">
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                </select>
                 <span asp-validation-for="PS4Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PS3Amount" class="control-label"></label>
-                <input asp-for="PS3Amount" class="form-control" />
+                <label asp-for="PS3Amount" class="control-label"></label>    $149.99
+                <select asp-for="PS3Amount" class="selectpicker">
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                </select>
                 <span asp-validation-for="PS3Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="XB360Amount" class="control-label"></label>
-                <input asp-for="XB360Amount" class="form-control" />
+                <label asp-for="XB360Amount" class="control-label"></label>    $150.00
+                <select asp-for="XB360Amount" class="selectpicker">
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                    <option value=10>10</option>
+                </select>
                 <span asp-validation-for="XB360Amount" class="text-danger"></span>
             </div>
             <div class="form-group">

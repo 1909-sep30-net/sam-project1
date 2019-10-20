@@ -12,16 +12,19 @@ namespace GStore.WebUI.Models
         [DisplayName("Customer ID")]
         public int CustomerId { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z""'\s-]*$"), Required, StringLength(15)]
+        [RegularExpression(@"^[a-zA-Z""'\s-]*$",ErrorMessage = "The Input Must be letters")
+            , Required, StringLength(15)]
         public string FirstName { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z""'\s-]*$"), Required, StringLength(14)]
+        [RegularExpression(@"^[a-zA-Z""'\s-]*$", ErrorMessage = "The Input Must be letters")
+            , Required, StringLength(15)]
         public string LastName { get; set; }
 
-        [RegularExpression(@"[0-9""'\s-]*$"), Required, StringLength(10, MinimumLength = 10)]
+        [RegularExpression(@"[0-9""'\s-]*$", ErrorMessage = "The inpu must be 10 numbers")
+            , Required, StringLength(10, MinimumLength = 10)]
         public string Phone { get; set; }
 
-        [Required]
+        [Required, Range(1,3, ErrorMessage = "The number must between 1 to 3")]
         public int FavoriteStore { get; set; }
 
     }

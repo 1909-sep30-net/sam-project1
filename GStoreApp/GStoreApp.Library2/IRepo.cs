@@ -10,7 +10,7 @@ namespace GStoreApp.Library
 
         public IEnumerable<Customer> SearchCustomer(Customer customer);
 
-        public string OrderPlaced(Order order);
+        public int OrderPlaced(Order order);
 
         public OrderOverView SearchPastOrder(int orderid);
 

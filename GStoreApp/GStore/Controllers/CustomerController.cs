@@ -49,7 +49,6 @@ namespace GStore.WebUI.Controllers
 
                 Customer customer = new Customer
                 {
-                    CustomerId = 0,
                     FirstName = format.NameFormat(cvModel.FirstName),
                     LastName = format.NameFormat(cvModel.LastName),
                     PhoneNumber = format.PhoneCheck(cvModel.Phone),
@@ -60,7 +59,7 @@ namespace GStore.WebUI.Controllers
                 {
                     logger.Info("CustomerController: Existed Customer Find");
                     customer.CustomerId = iRepo.SearchCustomer(customer).ToList()[0].CustomerId;
-                    ViewData["Customer"] = cvModel;
+                    ViewData["Customer"] = customer.CustomerId;
                     TempData["Customer"] = customer.CustomerId;
                     ViewData["Store"] = (int)customer.FavoriteStore;
                     TempData["Store"] = (int)customer.FavoriteStore;
@@ -70,10 +69,10 @@ namespace GStore.WebUI.Controllers
                 else
                 {
                     iRepo.AddCustomer(customer);
-
+                    customer.CustomerId = iRepo.SearchCustomer(customer).ToList()[0].CustomerId;
                     logger.Info("CustomerController: New Customer is Added");
 
-                    ViewData["Customer"] = cvModel;
+                    ViewData["Customer"] = customer.CustomerId;
                     TempData["Customer"] = customer.CustomerId;
                     ViewData["Store"] = (int)customer.FavoriteStore;
                     TempData["Store"] = (int)customer.FavoriteStore;
@@ -115,8 +114,16 @@ namespace GStore.WebUI.Controllers
                 price.Price.Add(products[i].UnitPrice);
             }
 
-            if (!ModelState.IsValid)
+            bool notAllZero = ovm.NSAmount == 0 && ovm.PS4PAmount == 0
+                            && ovm.XBOAmount == 0 && ovm.PS4Amount == 0
+                            && ovm.PS3Amount == 0 && ovm.XB360Amount == 0;
+
+            if ( !ModelState.IsValid || notAllZero )
             {
+                TempData["Customer"] = customerId;
+                TempData["Store"] = storeId;
+                ViewData["Customer"] = customerId;
+                ViewData["Store"] = storeId;
                 return View(ovm);
             }
 
@@ -162,8 +169,30 @@ namespace GStore.WebUI.Controllers
                 StoreId = storeId
             };
 
-            string orderPlaced = iRepo.OrderPlaced(order);
+            int orderId = iRepo.OrderPlaced(order);
 
+            if (orderId > -1)
+            {
+                Receipt receipt = new Receipt
+                {
+                    Order = order,
+                    orderId = orderId
+                };
+                ViewData["Receipt"] = receipt;
+                return View("OrderComplete", receipt);
+            }
+            else
+            {
+                TempData["Customer"] = customerId;
+                TempData["Store"] = storeId;
+                ViewData["Customer"] = customerId;
+                ViewData["Store"] = storeId;
+                return View(ovm);
+            }
+        }
+
+        public ActionResult OrderComplete()
+        {
             return View("Index");
         }
     }
