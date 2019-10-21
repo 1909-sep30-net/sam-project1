@@ -19,6 +19,11 @@ namespace GStore.WebUI.Controllers
             iRepo = repository;
         }
 
+        /// <summary>
+        /// GET, call repository to grab all product's data
+        /// then pass it to view
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             IEnumerable < Product > allProducts = iRepo.SearchProduct();

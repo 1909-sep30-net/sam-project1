@@ -11,12 +11,18 @@ namespace GStore.Controllers
 {
     public class HomeController : Controller
     {
-
+        /// <summary>
+        /// GET, return Home page view
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
-
+        /// <summary>
+        /// GET, goes to Tools view
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Tools()
         {
             return View();

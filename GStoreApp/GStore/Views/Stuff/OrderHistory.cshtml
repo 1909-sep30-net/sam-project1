@@ -6,7 +6,7 @@
     DisplayOrder display = (DisplayOrder)ViewData["display"];
 }
 
-<h1>OrderHistory By @display.CustomerId Or @display.StoreId</h1>
+<h1>OrderHistory By CustomerId Or StoreId</h1>
 
 <table class="table">
     <thead>
@@ -50,3 +50,6 @@
 }
     </tbody>
 </table>
+<div>
+    <a asp-action="Menu">Back to Search Page</a>
+</div>

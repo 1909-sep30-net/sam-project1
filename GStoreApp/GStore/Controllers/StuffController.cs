@@ -24,6 +24,12 @@ namespace GStore.WebUI.Controllers
             return View();
         }
 
+        /// <summary>
+        /// call repository to check if the login info is correct
+        /// if correct then go into search menu page
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index( GStoreApp.Library.Login login )
@@ -40,11 +46,20 @@ namespace GStore.WebUI.Controllers
             }
         }
 
+        /// <summary>
+        /// GET, default search menu page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Menu()
         {
             return View();
         }
 
+        /// <summary>
+        /// retrieve input number and call
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Menu( CheckType type )

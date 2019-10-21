@@ -9,8 +9,7 @@
     PriceViewModel price = (PriceViewModel)ViewData["Price"];
 }
 
-<h1>PlaceOrder</h1>
-
+<h3>Please choose your order today: </h3>
 
 <h4>Current Customer ID: @customerId</h4>
 
@@ -124,7 +123,7 @@
                 <span asp-validation-for="XB360Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"
+                <input type="submit" value="Place & GO!!" class="btn btn-primary"
                        asp-controller="Customer" asp-action="PlaceOrder" />
             </div>
         </form>
@@ -132,6 +131,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Home" asp-action="Index">Back to Home page</a>
 </div>
 

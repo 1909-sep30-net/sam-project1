@@ -19,7 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.UnitPrice)
             </th>
-            <th></th>
+            <th>
+                Google Search for the product
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +35,10 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+            <td>
+                <a href="https://www.google.com/search?q=@item.ProductName"
+                   target="_blank">Search</a>
             </td>
         </tr>
 }

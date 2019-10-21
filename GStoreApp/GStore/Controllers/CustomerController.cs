@@ -19,13 +19,20 @@ namespace GStore.WebUI.Controllers
             iRepo = repository;
         }
 
+        /// <summary>
+        /// GET, default action for customer
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
 
             return View();
         }
 
-        //GET
+        /// <summary>
+        /// GET, default action for customerInfo page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CustomerInfo()
         {
             var customerInfo = new CustomerViewModel();
@@ -33,7 +40,13 @@ namespace GStore.WebUI.Controllers
             return View();
         }
 
-        //POST
+        /// <summary>
+        /// POST, receieve customer info in viewmodel from view,
+        /// then call repository method to search/add customer with database
+        /// then go into placing order view
+        /// </summary>
+        /// <param name="cvModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CustomerInfo( CustomerViewModel cvModel )
@@ -109,7 +122,10 @@ namespace GStore.WebUI.Controllers
 
             }
         }
-        //GET
+        /// <summary>
+        /// GET, default view for place order
+        /// </summary>
+        /// <returns></returns>
         public ActionResult PlaceOrder()
         {
             var ovm = new OrderViewModel();
@@ -117,7 +133,15 @@ namespace GStore.WebUI.Controllers
             return View();
         }
 
-        //POST
+        /// <summary>
+        /// POST, receieve data in view model from customer
+        /// then call repository to check inventory in database
+        /// if not enough, reject the order. Or update the inventory
+        /// and add new order over view and order detail into database
+        /// Finally, go to order complete page
+        /// </summary>
+        /// <param name="ovm"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult PlaceOrder( OrderViewModel ovm )
@@ -206,6 +230,7 @@ namespace GStore.WebUI.Controllers
             }
             else
             {
+                ViewData["Price"] = price;
                 TempData["Customer"] = customerId;
                 TempData["Store"] = storeId;
                 ViewData["Customer"] = customerId;
@@ -213,7 +238,11 @@ namespace GStore.WebUI.Controllers
                 return View(ovm);
             }
         }
-
+        /// <summary>
+        /// GET show the order reciept to customer
+        /// then go back to main page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult OrderComplete()
         {
             return View("Index");
