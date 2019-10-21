@@ -49,89 +49,110 @@ namespace GStore.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Menu( CheckType type )
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View();
-            }
-            else if ( type.OrderId != 0)
-            {
-                OrderOverView o = iRepo.SearchPastOrder(type.OrderId);
-                List<OrderItem> orderItem = iRepo.SearchPastOrderItem(type.OrderId).ToList();
-                List<string> productName = new List<string>();
-                List<int> amount = new List<int>();
+                if (!ModelState.IsValid)
+                {
+                    logger.Error($"Model State is invalid");
+                    return View();
+                }
+                else if (type.OrderId != 0)
+                {
+                    OrderOverView o = iRepo.SearchPastOrder(type.OrderId);
+                    if (o == null)
+                    {
+                        return View(type);
+                    }
+                    List<OrderItem> orderItem = iRepo.SearchPastOrderItem(type.OrderId).ToList();
+                    List<string> productName = new List<string>();
+                    List<int> amount = new List<int>();
 
-                foreach( OrderItem item in orderItem)
-                {
-                    productName.Add(item.ProductName);
-                    amount.Add(item.Amount);
+                    foreach (OrderItem item in orderItem)
+                    {
+                        productName.Add(item.ProductName);
+                        amount.Add(item.Amount);
+                    }
+                    OrderDetail orderDetail = new OrderDetail
+                    {
+                        OrderId = o.OrderId,
+                        CustomerId = o.CustomerId,
+                        StoreId = o.StoreId,
+                        OrderDate = o.OrderDate,
+                        ProductName = productName,
+                        Amount = amount,
+                        TotalPrice = o.TotalPrice
+                    };
+                    return View("OrderDetail", orderDetail);
                 }
-                OrderDetail orderDetail = new OrderDetail
+                else if (type.StoreId != 0)
                 {
-                    OrderId = o.OrderId,
-                    CustomerId = o.CustomerId,
-                    StoreId = o.StoreId,
-                    OrderDate = o.OrderDate,
-                    ProductName = productName,
-                    Amount = amount,
-                    TotalPrice = o.TotalPrice
-                };
-                return View("OrderDetail", orderDetail);
+                    List<OrderOverView> overViews =
+                        iRepo.DisplayOrderByStore(type.StoreId).ToList();
+                    if (overViews == null)
+                    {
+                        return View(type);
+                    }
+                    List<int> oId = new List<int>();
+                    List<int> cId = new List<int>();
+                    List<int> sId = new List<int>();
+                    List<DateTime> dates = new List<DateTime>();
+                    List<decimal> p = new List<decimal>();
+                    for (int i = 0; i < overViews.Count; i++)
+                    {
+                        oId.Add(overViews[i].OrderId);
+                        cId.Add(overViews[i].CustomerId);
+                        sId.Add(overViews[i].StoreId);
+                        dates.Add(overViews[i].OrderDate);
+                        p.Add(overViews[i].TotalPrice);
+                    }
+                    DisplayOrder displayOrder = new DisplayOrder
+                    {
+                        OrderId = oId,
+                        CustomerId = cId,
+                        StoreId = sId,
+                        OrderDate = dates,
+                        TotalPrice = p
+                    };
+                    ViewData["display"] = displayOrder;
+                    return View("OrderHistory", displayOrder);
+                }
+                else if (type.CustomerId != 0)
+                {
+                    List<OrderOverView> overViews =
+                        iRepo.DisplayOrderByCustomer(type.CustomerId).ToList();
+                    if (overViews == null)
+                    {
+                        return View(type);
+                    }
+                    List<int> oId = new List<int>();
+                    List<int> cId = new List<int>();
+                    List<int> sId = new List<int>();
+                    List<DateTime> dates = new List<DateTime>();
+                    List<decimal> p = new List<decimal>();
+                    for (int i = 0; i < overViews.Count; i++)
+                    {
+                        oId.Add(overViews[i].OrderId);
+                        cId.Add(overViews[i].CustomerId);
+                        sId.Add(overViews[i].StoreId);
+                        dates.Add(overViews[i].OrderDate);
+                        p.Add(overViews[i].TotalPrice);
+                    }
+                    DisplayOrder displayOrder = new DisplayOrder
+                    {
+                        OrderId = oId,
+                        CustomerId = cId,
+                        StoreId = sId,
+                        OrderDate = dates,
+                        TotalPrice = p
+                    };
+                    ViewData["display"] = displayOrder;
+                    return View("OrderHistory", displayOrder);
+                }
             }
-            else if ( type.StoreId != 0)
+            catch ( InvalidOperationException ex )
             {
-                List < OrderOverView > overViews =
-                    iRepo.DisplayOrderByStore(type.StoreId).ToList();
-                List<int> oId = new List<int>();
-                List<int> cId = new List<int>();
-                List<int> sId = new List<int>();
-                List<DateTime> dates = new List<DateTime>();
-                List<decimal> p = new List<decimal>();
-                for( int i = 0; i < overViews.Count; i++ )
-                {
-                    oId.Add(overViews[i].OrderId);
-                    cId.Add(overViews[i].CustomerId);
-                    sId.Add(overViews[i].StoreId);
-                    dates.Add(overViews[i].OrderDate);
-                    p.Add(overViews[i].TotalPrice);
-                }
-                DisplayOrder displayOrder = new DisplayOrder
-                {
-                    OrderId = oId,
-                    CustomerId = cId,
-                    StoreId = sId,
-                    OrderDate = dates,
-                    TotalPrice = p
-                };
-                ViewData["display"] = displayOrder;
-                return View("OrderHistory", displayOrder);
-            }
-            else if ( type.CustomerId != 0)
-            {
-                List<OrderOverView> overViews =
-                    iRepo.DisplayOrderByCustomer(type.CustomerId).ToList();
-                List<int> oId = new List<int>();
-                List<int> cId = new List<int>();
-                List<int> sId = new List<int>();
-                List<DateTime> dates = new List<DateTime>();
-                List<decimal> p = new List<decimal>();
-                for (int i = 0; i < overViews.Count; i++)
-                {
-                    oId.Add(overViews[i].OrderId);
-                    cId.Add(overViews[i].CustomerId);
-                    sId.Add(overViews[i].StoreId);
-                    dates.Add(overViews[i].OrderDate);
-                    p.Add(overViews[i].TotalPrice);
-                }
-                DisplayOrder displayOrder = new DisplayOrder
-                {
-                    OrderId = oId,
-                    CustomerId = cId,
-                    StoreId = sId,
-                    OrderDate = dates,
-                    TotalPrice = p
-                };
-                ViewData["display"] = displayOrder;
-                return View("OrderHistory", displayOrder);
+                logger.Error($"StuffController: {ex.Message}");
+                return View(type);
             }
 
             return View();

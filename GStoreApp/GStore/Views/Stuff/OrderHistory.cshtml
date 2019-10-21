@@ -6,11 +6,8 @@
     DisplayOrder display = (DisplayOrder)ViewData["display"];
 }
 
-<h1>OrderHistory</h1>
+<h1>OrderHistory By @display.CustomerId Or @display.StoreId</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>

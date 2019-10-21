@@ -17,7 +17,7 @@ namespace GStore.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Tools()
         {
             return View();
         }

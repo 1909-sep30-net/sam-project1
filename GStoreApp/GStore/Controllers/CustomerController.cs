@@ -63,6 +63,18 @@ namespace GStore.WebUI.Controllers
                     TempData["Customer"] = customer.CustomerId;
                     ViewData["Store"] = (int)customer.FavoriteStore;
                     TempData["Store"] = (int)customer.FavoriteStore;
+                    List<Product> products = iRepo.SearchProduct().ToList();
+                    List<decimal> unitPrice = new List<decimal>();
+                    PriceViewModel price = new PriceViewModel
+                    {
+                        Price = unitPrice
+                    };
+
+                    for (int i = 0; i < products.Count; i++)
+                    {
+                        price.Price.Add(products[i].UnitPrice);
+                    }
+                    ViewData["Price"] = price;
 
                     return View("PlaceOrder");
                 }
@@ -71,7 +83,18 @@ namespace GStore.WebUI.Controllers
                     iRepo.AddCustomer(customer);
                     customer.CustomerId = iRepo.SearchCustomer(customer).ToList()[0].CustomerId;
                     logger.Info("CustomerController: New Customer is Added");
+                    List<Product> products = iRepo.SearchProduct().ToList();
+                    List<decimal> unitPrice = new List<decimal>();
+                    PriceViewModel price = new PriceViewModel
+                    {
+                        Price = unitPrice
+                    };
 
+                    for (int i = 0; i < products.Count; i++)
+                    {
+                        price.Price.Add(products[i].UnitPrice);
+                    }
+                    ViewData["Price"] = price;
                     ViewData["Customer"] = customer.CustomerId;
                     TempData["Customer"] = customer.CustomerId;
                     ViewData["Store"] = (int)customer.FavoriteStore;
