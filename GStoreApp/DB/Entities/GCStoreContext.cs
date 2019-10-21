@@ -21,6 +21,7 @@ namespace DB.Entities
         public virtual DbSet<OrderOverView> OrderOverView { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Store> Store { get; set; }
+        public virtual DbSet<Login> Login { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -129,6 +130,16 @@ namespace DB.Entities
                 entity.Property(e => e.StoreName)
                     .IsRequired()
                     .HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<Login>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+                entity.Property(e => e.Name)
+                      .HasMaxLength(20);
+                entity.Property(e => e.Password)
+                      .IsRequired();
+                      
             });
 
             OnModelCreatingPartial(modelBuilder);

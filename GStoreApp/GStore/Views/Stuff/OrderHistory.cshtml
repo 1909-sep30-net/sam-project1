@@ -1,0 +1,55 @@
+﻿@model GStore.WebUI.Models.DisplayOrder
+@using GStore.WebUI.Models;
+
+@{
+    ViewData["Title"] = "OrderHistory";
+    DisplayOrder display = (DisplayOrder)ViewData["display"];
+}
+
+<h1>OrderHistory</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@for( int i = 0; i < display.OrderId.Count; i++) { 
+        <tr>
+            <th>
+                @display.OrderId[i]
+            </th>
+            <th>
+                @display.CustomerId[i]
+            </th>
+            <th>
+                @display.StoreId[i]
+            </th>
+            <th>
+                @display.OrderDate[i]
+            </th>
+            <th>
+                @display.TotalPrice[i]
+            </th>
+        </tr>
+}
+    </tbody>
+</table>

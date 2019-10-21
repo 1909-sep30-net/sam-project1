@@ -23,5 +23,10 @@ namespace GStoreApp.Library
         public Store CheckIfStoreExists(int storeId);
 
         public IEnumerable<Product> SearchProduct();
+
+        public int Login(Login login);
+
+        public Product SearchProduct(int productId);
+
     }
 }

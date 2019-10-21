@@ -219,5 +219,27 @@ namespace DB.Repo
                  return product.Select(Mapper.MapProduct);
              }
         }
+
+        public l.Product SearchProduct( int productId )
+        {
+            d.Product productDB = dbcontext.Product.Find(productId);
+            l.Product productL = Mapper.MapProduct(productDB);
+            return productL;
+        }
+
+        public int Login( l.Login login )
+        {
+            try
+            {
+                d.Login pass = dbcontext.Login.Where(p => p.Name == login.Name
+                                                   && p.Password == login.Password).First();
+            }
+            catch ( InvalidOperationException ex)
+            {
+                logger.Error("(Repo.Login)Invalid Name and/or Password");
+                return 0;
+            }
+            return 1;
+        }
     }
 }
