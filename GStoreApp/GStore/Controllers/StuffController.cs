@@ -50,7 +50,6 @@ namespace GStore.WebUI.Controllers
         /// GET, default search menu page
         /// </summary>
         /// <returns></returns>
-        [ValidateAntiForgeryToken]
         public ActionResult Menu()
         {
             return View();

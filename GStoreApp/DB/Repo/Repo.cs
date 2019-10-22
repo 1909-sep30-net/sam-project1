@@ -81,8 +81,9 @@ namespace DB.Repo
                 }
                 else
                 {
-                    var inventory = dbcontext.Inventory.Where(i => i.ProductId == j + 1)
-                             .First();
+                    var inventory = dbcontext.Inventory.Where(i => i.ProductId == j + 1
+                                                           && i.StoreId == order.StoreId)
+                                                       .First();
                     inventory.Amount = invent[j].Amount - order.Amount[j];
                     if ( j == CurrentInventoryE.Count() - 1)
                     {
