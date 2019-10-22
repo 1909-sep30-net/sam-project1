@@ -17,6 +17,7 @@ namespace GStore.WebUI.Controllers
         /// <returns></returns>
         public string PhoneCheck(string phone)
         {
+            phone = Regex.Replace(phone, @"[^0-9]+", "");
             phone = "(" + phone.Substring(0, 3) + ")" + phone.Substring(3, 3)
                     + "-" + phone.Substring(6, 4);
             return phone;

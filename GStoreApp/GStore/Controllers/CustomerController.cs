@@ -146,97 +146,96 @@ namespace GStore.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PlaceOrder( OrderViewModel ovm )
         {
-
-            int customerId = (int)TempData["Customer"];
-            int storeId = (int)TempData["Store"];
-            List<Product> products = iRepo.SearchProduct().ToList();
-            List<decimal> unitPrice = new List<decimal>();
-            PriceViewModel price = new PriceViewModel
-            {
-                Price = unitPrice
-            };
-
-            for (int i = 0; i < products.Count; i++)
-            {
-                price.Price.Add(products[i].UnitPrice);
-            }
-
-            bool notAllZero = ovm.NSAmount == 0 && ovm.PS4PAmount == 0
-                            && ovm.XBOAmount == 0 && ovm.PS4Amount == 0
-                            && ovm.PS3Amount == 0 && ovm.XB360Amount == 0;
-
-            if ( !ModelState.IsValid || notAllZero )
-            {
-                TempData["Customer"] = customerId;
-                TempData["Store"] = storeId;
-                ViewData["Customer"] = customerId;
-                ViewData["Store"] = storeId;
-                return View(ovm);
-            }
-
-            List<int> amount = new List<int>();
-            decimal totalPrice = 0;
-            for (int i = 0; i < 6; i++)
-            {
-                switch (i)
+                int customerId = (int)TempData["Customer"];
+                int storeId = (int)TempData["Store"];
+                List<Product> products = iRepo.SearchProduct().ToList();
+                List<decimal> unitPrice = new List<decimal>();
+                PriceViewModel price = new PriceViewModel
                 {
-                    case 0:
-                        amount.Add(ovm.NSAmount);
-                        totalPrice += products[i].UnitPrice * ovm.NSAmount;
-                        break;
-                    case 1:
-                        amount.Add(ovm.PS4PAmount);
-                        totalPrice += products[i].UnitPrice * ovm.PS4PAmount;
-                        break;
-                    case 2:
-                        amount.Add(ovm.XBOAmount);
-                        totalPrice += products[i].UnitPrice * ovm.XBOAmount;
-                        break;
-                    case 3:
-                        amount.Add(ovm.PS4Amount);
-                        totalPrice += products[i].UnitPrice * ovm.PS4Amount;
-                        break;
-                    case 4:
-                        amount.Add(ovm.PS3Amount);
-                        totalPrice += products[i].UnitPrice * ovm.PS3Amount;
-                        break;
-                    default:
-                        amount.Add(ovm.XB360Amount);
-                        totalPrice += products[i].UnitPrice * ovm.XB360Amount;
-                        break;
-                }
-            }
-
-            Order order = new Order
-            {
-                CustomerId = customerId,
-                Amount = amount,
-                OrderDate = DateTime.Now,
-                TotalPrice = totalPrice,
-                StoreId = storeId
-            };
-
-            int orderId = iRepo.OrderPlaced(order);
-
-            if (orderId > -1)
-            {
-                Receipt receipt = new Receipt
-                {
-                    Order = order,
-                    orderId = orderId
+                    Price = unitPrice
                 };
-                ViewData["Receipt"] = receipt;
-                return View("OrderComplete", receipt);
-            }
-            else
-            {
-                ViewData["Price"] = price;
-                TempData["Customer"] = customerId;
-                TempData["Store"] = storeId;
-                ViewData["Customer"] = customerId;
-                ViewData["Store"] = storeId;
-                return View(ovm);
-            }
+
+                for (int i = 0; i < products.Count; i++)
+                {
+                    price.Price.Add(products[i].UnitPrice);
+                }
+
+                bool notAllZero = ovm.NSAmount == 0 && ovm.PS4PAmount == 0
+                                && ovm.XBOAmount == 0 && ovm.PS4Amount == 0
+                                && ovm.PS3Amount == 0 && ovm.XB360Amount == 0;
+
+                if (!ModelState.IsValid || notAllZero)
+                {
+                    TempData["Customer"] = customerId;
+                    TempData["Store"] = storeId;
+                    ViewData["Customer"] = customerId;
+                    ViewData["Store"] = storeId;
+                    return View(ovm);
+                }
+
+                List<int> amount = new List<int>();
+                decimal totalPrice = 0;
+                for (int i = 0; i < 6; i++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            amount.Add(ovm.NSAmount);
+                            totalPrice += products[i].UnitPrice * ovm.NSAmount;
+                            break;
+                        case 1:
+                            amount.Add(ovm.PS4PAmount);
+                            totalPrice += products[i].UnitPrice * ovm.PS4PAmount;
+                            break;
+                        case 2:
+                            amount.Add(ovm.XBOAmount);
+                            totalPrice += products[i].UnitPrice * ovm.XBOAmount;
+                            break;
+                        case 3:
+                            amount.Add(ovm.PS4Amount);
+                            totalPrice += products[i].UnitPrice * ovm.PS4Amount;
+                            break;
+                        case 4:
+                            amount.Add(ovm.PS3Amount);
+                            totalPrice += products[i].UnitPrice * ovm.PS3Amount;
+                            break;
+                        default:
+                            amount.Add(ovm.XB360Amount);
+                            totalPrice += products[i].UnitPrice * ovm.XB360Amount;
+                            break;
+                    }
+                }
+
+                Order order = new Order
+                {
+                    CustomerId = customerId,
+                    Amount = amount,
+                    OrderDate = DateTime.Now,
+                    TotalPrice = totalPrice,
+                    StoreId = storeId
+                };
+
+                int orderId = iRepo.OrderPlaced(order);
+
+                if (orderId > -1)
+                {
+                    Receipt receipt = new Receipt
+                    {
+                        Order = order,
+                        orderId = orderId
+                    };
+                    ViewData["Receipt"] = receipt;
+                    return View("OrderComplete", receipt);
+                }
+                else
+                {
+                    ViewData["Price"] = price;
+                    TempData["Customer"] = customerId;
+                    TempData["Store"] = storeId;
+                    ViewData["Customer"] = customerId;
+                    ViewData["Store"] = storeId;
+                    return View(ovm);
+                }
         }
         /// <summary>
         /// GET show the order reciept to customer

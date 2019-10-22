@@ -11,7 +11,7 @@ namespace DB.Repo
     /// 
     /// 
     /// </summary>
-    public static class Mapper
+    public class Mapper
     {
 
         public static Customer MapCustomer(Entities.Customer customer)

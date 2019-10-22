@@ -20,7 +20,7 @@ namespace GStore.WebUI.Models
             , Required, StringLength(15)]
         public string LastName { get; set; }
 
-        [RegularExpression(@"[0-9""'\s-]*$", ErrorMessage = "The inpu must be 10 numbers")
+        [RegularExpression(@"[0-9""'\s-]*$", ErrorMessage = "The input must be 10 numbers")
             , Required, StringLength(10, MinimumLength = 10)]
         public string Phone { get; set; }
 

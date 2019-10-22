@@ -50,6 +50,7 @@ namespace GStore.WebUI.Controllers
         /// GET, default search menu page
         /// </summary>
         /// <returns></returns>
+        [ValidateAntiForgeryToken]
         public ActionResult Menu()
         {
             return View();
@@ -103,7 +104,7 @@ namespace GStore.WebUI.Controllers
                 {
                     List<OrderOverView> overViews =
                         iRepo.DisplayOrderByStore(type.StoreId).ToList();
-                    if (overViews == null)
+                    if (overViews.Count == 0)
                     {
                         return View(type);
                     }
@@ -135,7 +136,7 @@ namespace GStore.WebUI.Controllers
                 {
                     List<OrderOverView> overViews =
                         iRepo.DisplayOrderByCustomer(type.CustomerId).ToList();
-                    if (overViews == null)
+                    if (overViews.Count == 0)
                     {
                         return View(type);
                     }
