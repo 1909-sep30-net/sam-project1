@@ -1,0 +1,64 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+# three different ways to solve the initial problem
+
+# - script:
+#     cd RestaurantReviews
+#     dotnet build --configuration $(buildConfiguration)
+#   displayName: 'dotnet build $(buildConfiguration)'
+
+# - script: dotnet build RestaurantReviews --configuration $(buildConfiguration)
+#   displayName: 'dotnet build $(buildConfiguration)'
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+  workingDirectory: ./GStoreApp
+
+# - script: dotnet test
+#   displayName: dotnet test
+#   workingDirectory: RestaurantReviews
+
+# a task can encapsulate some useful logic so we don't have to
+# write it all out in script step...
+# in this case, this task is both running tests and publishing the results
+# to the build itself
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: 'test'
+    projects: './GStoreApp'
+    arguments: '-c $(buildConfiguration) --collect "XPlat Code Coverage"'
+
+- task: PublishCodeCoverageResults@1
+  displayName: Publish code coverage
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet publish + zip
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    zipAfterPublish: true
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: '免費試用版(9a56e737-3e9f-4bb8-bc24-e316a0047308)'
+    appType: 'webApp'
+    WebAppName: 'GStoreWebUI'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
