@@ -6,6 +6,6 @@ namespace DB
 {
     class Config
     {
-        public const string connectionString = ""
+        public const string connectionString = "";
     }
 }
