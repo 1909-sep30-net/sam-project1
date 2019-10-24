@@ -25,7 +25,7 @@ steps:
 
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-  workingDirectory: ./RestaurantReviews
+  workingDirectory: ./GStoreApp
 
 # - script: dotnet test
 #   displayName: dotnet test
@@ -39,7 +39,7 @@ steps:
   displayName: dotnet test
   inputs:
     command: 'test'
-    projects: './RestaurantReviews'
+    projects: './GStoreApp'
     arguments: '-c $(buildConfiguration) --collect "XPlat Code Coverage"'
 
 - task: PublishCodeCoverageResults@1
