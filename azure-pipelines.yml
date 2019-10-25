@@ -16,10 +16,10 @@ steps:
 - task: SonarCloudPrepare@1
   displayName: Prepare SonarCloud analysis
   inputs:
-    SonarCloud: 'sonarcloud-escalonn'
-    organization: 'escalonn-github'
+    SonarCloud: 'sonarcloud-o100249243'
+    organization: 'artage0306'
     scannerMode: 'MSBuild'
-    projectKey: 'restreviews1909'
+    projectKey: 'artage0306'
     extraProperties: |
         sonar.exclusions=**/lib/**
 # three different ways to solve the initial problem
