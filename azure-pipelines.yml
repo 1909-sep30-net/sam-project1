@@ -16,7 +16,7 @@ steps:
 - task: SonarCloudPrepare@1
   displayName: Prepare SonarCloud analysis
   inputs:
-    SonarCloud: 'sonarcloud-o100249243'
+    SonarCloud: 'test-revature'
     organization: 'artage0306'
     scannerMode: 'MSBuild'
     projectKey: 'artage0306'
