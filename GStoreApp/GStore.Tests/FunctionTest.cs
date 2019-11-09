@@ -6,7 +6,7 @@ using DB.Repo;
 
 namespace GStore.Tests
 {
-    public class UnitTest1
+    public class FunctionTest
     {
         [Fact]
         public void NameFormatTest()

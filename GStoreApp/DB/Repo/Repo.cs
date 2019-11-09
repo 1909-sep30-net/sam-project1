@@ -18,11 +18,12 @@ namespace DB.Repo
         /// <summary>
         /// Start up a new Database Context controller
         /// </summary>
-        public Repo()
+        public Repo( d.GCStoreContext d_dbcontext )
         {
-            var optionsBuilder = new DbContextOptionsBuilder<d.GCStoreContext>();
-            optionsBuilder.UseSqlServer(Config.connectionString);
-            dbcontext = new d.GCStoreContext(optionsBuilder.Options);
+            //var optionsBuilder = new DbContextOptionsBuilder<d.GCStoreContext>();
+            //optionsBuilder.UseSqlServer(Config.connectionString);
+            //dbcontext = new d.GCStoreContext(optionsBuilder.Options);
+            dbcontext = d_dbcontext;
         }
 
         /// <summary>
