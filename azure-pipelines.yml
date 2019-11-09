@@ -13,6 +13,15 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: SonarCloudPrepare@1
+  displayName: Prepare SonarCloud analysis
+  inputs:
+    SonarCloud: 'test-revature'
+    organization: 'artage0306'
+    scannerMode: 'MSBuild'
+    projectKey: 'artage0306'
+    extraProperties: |
+        sonar.exclusions=**/lib/**
 # three different ways to solve the initial problem
 
 # - script:
@@ -48,6 +57,12 @@ steps:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
+- task: SonarCloudAnalyze@1
+  displayName: Run SonarCloud analysis
+
+- task: SonarCloudPublish@1
+  displayName: Publish SonarCloud quality gate result
+  
 - task: DotNetCoreCLI@2
   displayName: dotnet publish + zip
   inputs:
